@@ -3,7 +3,7 @@
 
 #include<string>
 #include<memory>
-#include"JsonObject.h"
+//#include"JsonObject.h"
 
 class JsonValue
 {
@@ -14,7 +14,7 @@ public:
     JsonValue(double d);
     JsonValue(const std::string& s);
     //JsonValue(JsonArray);
-    JsonValue(const JsonObject& jo);
+    //JsonValue(const JsonObject& jo);
 
     bool isNull() const;
     bool isBool() const;
@@ -28,7 +28,7 @@ public:
     double toDouble(double defaultValue = 0.0) const;
     std::string toString(const std::string& defaultValue = "") const;
     //bool toArray(const JsonArray& defaultValue = JsonArray()) const
-    JsonObject toObject(const JsonObject& defaultValue = JsonObject()) const;
+    //JsonObject toObject(const JsonObject& defaultValue = JsonObject()) const;
 
     Type type() const;
 
@@ -38,7 +38,7 @@ private:
     double doubleValue;
     std::string stringValue;
     //std::unique_ptr<JsonArray> jsonArrayPtr;
-    std::unique_ptr<JsonObject> jsonObjectPtr;
+    //std::unique_ptr<JsonObject> jsonObjectPtr;
 
 };
 

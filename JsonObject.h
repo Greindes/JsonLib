@@ -21,22 +21,22 @@ public:
         iterator operator++();
         iterator operator--();
         JsonValue& operator*() const;
+        bool operator==(const iterator& other) const;
+        bool operator!=(const iterator& other) const;
     private:
         std::list<std::pair<std::string, JsonValue>>::iterator iter;
-
-        void setIter(std::list<std::pair<std::string, JsonValue>>::iterator i);
     };
 
     bool isEmpty();
     size_t size();
 
-    JsonValue get(std::string key) const;
+    JsonValue get(std::string key);
 
-    iterator find(std::string key) const;
-    iterator begin() const;
-    iterator end() const;
+    iterator find(std::string key);
+    iterator begin();
+    iterator end();
 
-    iterator insert(const std::string& key, const JsonValue& value);
+    void insert(const std::string& key, const JsonValue& value);
     void remove(const std::string& key);
 
 private:

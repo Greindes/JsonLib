@@ -20,11 +20,11 @@ JsonValue::JsonValue(const std::string &s) : valueType(String), stringValue(s)
 {
 
 }
-
+/*
 JsonValue::JsonValue(const JsonObject& jo) : valueType(Object), jsonObjectPtr(new JsonObject(jo))
 {
 
-}
+}*/
 
 bool JsonValue::isNull() const
 {
@@ -76,10 +76,10 @@ std::string JsonValue::toString(const std::string &defaultValue) const
     return isString() ? stringValue : defaultValue;
 }
 
-JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
+/*JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
 {
     return *jsonObjectPtr;
-}
+}*/
 
 JsonValue::Type JsonValue::type() const
 {
