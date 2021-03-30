@@ -1,5 +1,6 @@
-#include "JsonValue.h"
-
+#include"JsonValue.h"
+#include"JsonArray.h"
+#include"JsonObject.h"
 
 JsonValue::JsonValue()
 {
@@ -20,11 +21,24 @@ JsonValue::JsonValue(const std::string &s) : valueType(String), stringValue(s)
 {
 
 }
-/*
-JsonValue::JsonValue(const JsonObject& jo) : valueType(Object), jsonObjectPtr(new JsonObject(jo))
-{
 
-}*/
+JsonValue::JsonValue(const JsonArray &ja) : valueType(Array)
+{
+    jsonArrayPtr = new JsonArray(ja);
+}
+
+JsonValue::JsonValue(const JsonObject& jo) : valueType(Object)
+{
+    jsonObjectPtr = new JsonObject(jo);
+}
+
+JsonValue::~JsonValue()
+{
+    if (jsonArrayPtr)
+        delete jsonArrayPtr;
+    if (jsonObjectPtr)
+        delete jsonObjectPtr;
+}
 
 bool JsonValue::isNull() const
 {
@@ -76,10 +90,15 @@ std::string JsonValue::toString(const std::string &defaultValue) const
     return isString() ? stringValue : defaultValue;
 }
 
-/*JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
+JsonArray JsonValue::toArray(const JsonArray &defaultValue) const
 {
-    return *jsonObjectPtr;
-}*/
+    return isArray() ? *jsonArrayPtr : defaultValue;
+}
+
+JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
+{
+    return isObject() ? *jsonObjectPtr : defaultValue;
+}
 
 JsonValue::Type JsonValue::type() const
 {

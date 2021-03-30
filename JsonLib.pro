@@ -4,10 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        JsonArray.cpp \
         JsonObject.cpp \
         JsonValue.cpp \
         main.cpp
 
 HEADERS += \
+    JsonArray.h \
     JsonObject.h \
     JsonValue.h
