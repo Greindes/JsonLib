@@ -18,6 +18,8 @@ public:
     const JsonValue& operator[](size_t i) const;
     JsonValue& operator[](size_t i);
 
+    void print(size_t tab) const;
+
 private:
     std::vector<JsonValue> values;
 };

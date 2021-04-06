@@ -1,4 +1,6 @@
 #include "JsonObject.h"
+#include <iostream>
+
 
 JsonObject::JsonObject()
 {
@@ -62,7 +64,23 @@ void JsonObject::remove(const std::string &key)
     }
 }
 
+void JsonObject::print(size_t tab) const
+{
+    std::string fill(tab + 4, ' ');
+    std::cout << "{\n";
+    for (const auto & ptr : values) {
+        std::cout << fill << '\"' << ptr.first << "\" : ";
+        ptr.second.print(tab + 4);
+    }
+    std::cout << std::string(tab, ' ') << "}\n";
+}
+
 JsonObject::iterator::iterator()
+{
+
+}
+
+JsonObject::iterator::iterator(const JsonObject::iterator &other) : iter(other.iter)
 {
 
 }

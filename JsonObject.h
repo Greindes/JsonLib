@@ -14,7 +14,7 @@ public:
         friend class JsonObject;
     public:
         iterator();
-
+        iterator(const iterator& other);
         std::string key() const;
         JsonValue value() const;
         iterator& operator=(iterator& other);
@@ -39,6 +39,7 @@ public:
     void insert(const std::string& key, const JsonValue& value);
     void remove(const std::string& key);
 
+    void print(size_t t = 0) const;
 private:
     std::list<std::pair<std::string, JsonValue>> values;
     size_t valsSize;

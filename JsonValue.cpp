@@ -1,10 +1,26 @@
 #include"JsonValue.h"
 #include"JsonArray.h"
 #include"JsonObject.h"
+#include<iostream>
+
 
 JsonValue::JsonValue()
 {
 
+}
+
+JsonValue::JsonValue(const JsonValue &other) : valueType(other.type())
+{
+    if (isBool())
+        boolValue = other.boolValue;
+    else if (isInt())
+        intValue = other.intValue;
+    else if (isString())
+        stringValue = other.stringValue;
+    else if (isObject())
+        jsonObjectPtr = new JsonObject(*other.jsonObjectPtr);
+    else if (isArray())
+        jsonArrayPtr = new JsonArray(*other.jsonArrayPtr);
 }
 
 JsonValue::JsonValue(bool b) : valueType(Bool), boolValue(b)
@@ -12,7 +28,7 @@ JsonValue::JsonValue(bool b) : valueType(Bool), boolValue(b)
 
 }
 
-JsonValue::JsonValue(double d) : valueType(Double), doubleValue(d)
+JsonValue::JsonValue(int i) : valueType(Int), intValue(i)
 {
 
 }
@@ -50,9 +66,9 @@ bool JsonValue::isBool() const
     return valueType == Bool;
 }
 
-bool JsonValue::isDouble() const
+bool JsonValue::isInt() const
 {
-    return valueType == Double;
+    return valueType == Int;
 }
 
 bool JsonValue::isString() const
@@ -80,9 +96,9 @@ bool JsonValue::toBool(bool defaultValue) const
     return isBool() ? boolValue : defaultValue;
 }
 
-double JsonValue::toDouble(double defaultValue) const
+double JsonValue::toInt(int defaultValue) const
 {
-    return isDouble() ? doubleValue : defaultValue;
+    return isInt() ? intValue : defaultValue;
 }
 
 std::string JsonValue::toString(const std::string &defaultValue) const
@@ -103,4 +119,20 @@ JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
 JsonValue::Type JsonValue::type() const
 {
     return valueType;
+}
+
+void JsonValue::print(size_t tab) const
+{
+    if (isUndefined())
+        return;
+    if (isBool())
+        std::cout << (boolValue ? "true" : "false") << '\n';
+    else if (isInt())
+        std::cout << intValue << '\n';
+    else if (isString())
+        std::cout << '\"' << stringValue << "\"\n";
+    else if (isObject())
+        jsonObjectPtr->print(tab);
+    else if (isArray())
+        jsonArrayPtr->print(tab);
 }
