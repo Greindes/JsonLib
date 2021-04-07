@@ -1,10 +1,16 @@
 #include"JsonArray.h"
+#include"JsonParser.h"
 #include<iostream>
 
 
 JsonArray::JsonArray()
 {
 
+}
+
+JsonArray JsonArray::getFromJsonString(const std::string &json)
+{
+    return JsonParser::getJsonArray(json);
 }
 
 size_t JsonArray::size()

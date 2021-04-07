@@ -8,6 +8,7 @@ class JsonArray
 {
 public:
     JsonArray();
+    static JsonArray getFromJsonString(const std::string& json);
 
     size_t size();
     bool empty();

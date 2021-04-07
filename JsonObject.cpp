@@ -1,10 +1,16 @@
 #include "JsonObject.h"
+#include "JsonParser.h"
 #include <iostream>
 
 
 JsonObject::JsonObject()
 {
 
+}
+
+JsonObject JsonObject::getFromJsonString(const std::string &json)
+{
+    return JsonParser::getJsonObject(json);
 }
 
 bool JsonObject::isEmpty()

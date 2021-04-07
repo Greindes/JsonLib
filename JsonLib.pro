@@ -6,10 +6,12 @@ CONFIG -= qt
 SOURCES += \
         JsonArray.cpp \
         JsonObject.cpp \
+        JsonParser.cpp \
         JsonValue.cpp \
         main.cpp
 
 HEADERS += \
     JsonArray.h \
     JsonObject.h \
+    JsonParser.h \
     JsonValue.h

@@ -9,6 +9,7 @@ class JsonObject
 {
 public:
     JsonObject();
+    static JsonObject getFromJsonString(const std::string& json);
     class iterator
     {
         friend class JsonObject;
