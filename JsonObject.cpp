@@ -70,15 +70,35 @@ void JsonObject::remove(const std::string &key)
     }
 }
 
+std::string JsonObject::getJsonString(size_t space) const
+{
+    std::string res;
+    std::string fill(space + 4, ' ');
+    res += "{\n";
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        res += fill + "\"" + iter->first + "\" : ";
+        res += iter->second.getJsonString(space + 4);
+        if (iter != --values.end())
+            res += ",\n";
+        else
+            res.push_back('\n');
+    }
+    res += std::string(space, ' ') + "}";
+    return res;
+}
+
 void JsonObject::print(size_t tab) const
 {
     std::string fill(tab + 4, ' ');
     std::cout << "{\n";
-    for (const auto & ptr : values) {
-        std::cout << fill << '\"' << ptr.first << "\" : ";
-        ptr.second.print(tab + 4);
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        std::cout << fill << '\"' << iter->first << "\" : ";
+        iter->second.print(tab + 4);
+        if (iter != --values.end())
+            std::cout << ',';
+        std::cout << '\n';
     }
-    std::cout << std::string(tab, ' ') << "}\n";
+    std::cout << std::string(tab, ' ') << "}";
 }
 
 JsonObject::iterator::iterator()

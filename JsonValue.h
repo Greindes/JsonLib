@@ -19,6 +19,8 @@ public:
     JsonValue(const JsonObject& jo);
     ~JsonValue();
 
+    static JsonValue getNullValue();
+
     bool isNull() const;
     bool isBool() const;
     bool isInt() const;
@@ -34,7 +36,8 @@ public:
     JsonObject toObject(const JsonObject& defaultValue) const;
 
     Type type() const;
-    void print(size_t tab = 0) const;
+    std::string getJsonString(size_t space = 0) const;
+    void print(size_t space = 0) const;
 
 private:
     Type valueType = Undefined;

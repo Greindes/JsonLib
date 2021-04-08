@@ -40,6 +40,7 @@ public:
     void insert(const std::string& key, const JsonValue& value);
     void remove(const std::string& key);
 
+    std::string getJsonString(size_t space = 0) const;
     void print(size_t t = 0) const;
 private:
     std::list<std::pair<std::string, JsonValue>> values;

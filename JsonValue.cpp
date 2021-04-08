@@ -56,6 +56,13 @@ JsonValue::~JsonValue()
         delete jsonObjectPtr;
 }
 
+JsonValue JsonValue::getNullValue()
+{
+    JsonValue res;
+    res.valueType = Null;
+    return res;
+}
+
 bool JsonValue::isNull() const
 {
     return valueType == Null;
@@ -121,18 +128,43 @@ JsonValue::Type JsonValue::type() const
     return valueType;
 }
 
-void JsonValue::print(size_t tab) const
+std::string JsonValue::getJsonString(size_t space) const
+{
+    if (isUndefined())
+        return "";
+    if (isNull())
+        return "null";
+    else if (isBool())
+        return (boolValue ? "true" : "false");
+    else if (isInt())
+        return std::to_string(intValue); // << '\n';
+    else if (isObject())
+        return jsonObjectPtr->getJsonString(space);
+    else if (isArray())
+        return jsonArrayPtr->getJsonString(space);
+    else if (isString()) {
+        std::string res = "\"";
+        res += stringValue;
+        res.push_back('\"');
+        return res;
+    }
+    return "";
+}
+
+void JsonValue::print(size_t space) const
 {
     if (isUndefined())
         return;
-    if (isBool())
-        std::cout << (boolValue ? "true" : "false") << '\n';
+    if (isNull())
+        std::cout << "null"; //"\n";
+    else if (isBool())
+        std::cout << (boolValue ? "true" : "false"); // << '\n';
     else if (isInt())
-        std::cout << intValue << '\n';
+        std::cout << intValue; // << '\n';
     else if (isString())
-        std::cout << '\"' << stringValue << "\"\n";
+        std::cout << '\"' << stringValue << "\"";//\n";
     else if (isObject())
-        jsonObjectPtr->print(tab);
+        jsonObjectPtr->print(space);
     else if (isArray())
-        jsonArrayPtr->print(tab);
+        jsonArrayPtr->print(space);
 }

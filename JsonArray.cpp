@@ -38,16 +38,29 @@ const JsonValue &JsonArray::operator[](size_t i) const
     return values[i];
 }
 
-void JsonArray::print(size_t tab) const
+std::string JsonArray::getJsonString(size_t space) const
+{
+    std::string res(1, '[');
+    size_t size = values.size();
+    for (size_t i = 0; i < size; ++i) {
+        res += values[i].getJsonString(space);
+        if (i < size - 1)
+            res += ", ";
+    }
+    res += "]\n";
+    return res;
+}
+
+void JsonArray::print(size_t space) const
 {
     size_t size = values.size();
     std::cout << '[';
     for (size_t i = 0; i < size; ++i) {
-        values[i].print(tab);
+        values[i].print(space);
         if (i < size - 1)
-            std::cout << std::string(tab, ' ') << ", ";
+            std::cout << ", ";
     }
-    std::cout << std::string(tab, ' ') << "]\n";
+    std::cout << "]\n";
 }
 
 JsonValue &JsonArray::operator[](size_t i)

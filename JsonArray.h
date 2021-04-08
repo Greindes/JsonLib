@@ -19,7 +19,8 @@ public:
     const JsonValue& operator[](size_t i) const;
     JsonValue& operator[](size_t i);
 
-    void print(size_t tab) const;
+    std::string getJsonString(size_t space) const;
+    void print(size_t space) const;
 
 private:
     std::vector<JsonValue> values;
