@@ -1,18 +1,18 @@
 #ifndef JSONOBJECT_H
 #define JSONOBJECT_H
-
+#include"JsonLib_global.h"
 #include<string>
 #include<list>
 #include"JsonValue.h"
 
-class JsonObject
+class JSONLIB_EXPORT JsonObject
 {
 public:
     JsonObject();
     JsonObject(const JsonObject& other);
     JsonObject & operator=(const JsonObject& other);
     static JsonObject getFromJsonString(const std::string& json);
-    class iterator
+    class JSONLIB_EXPORT iterator
     {
         friend class JsonObject;
     public:
@@ -45,7 +45,7 @@ public:
     std::string getJsonString(size_t space = 0) const;
 private:
     std::list<std::pair<std::string, JsonValue>> values;
-    size_t valsSize;
+    size_t valsSize = 0;
 };
 
 #endif // JSONOBJECT_H

@@ -1,10 +1,10 @@
 #ifndef JSONARRAY_H
 #define JSONARRAY_H
-
+#include"JsonLib_global.h"
 #include<vector>
 #include"JsonValue.h"
 
-class JsonArray
+class JSONLIB_EXPORT JsonArray
 {
 public:
     JsonArray();

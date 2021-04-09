@@ -1,12 +1,12 @@
 #ifndef JSONVALUE_H
 #define JSONVALUE_H
-
+#include"JsonLib_global.h"
 #include<string>
 
 class JsonObject;
 class JsonArray;
 
-class JsonValue
+class JSONLIB_EXPORT JsonValue
 {
 public:
     enum Type { Null, Bool, Int, String, Array, Object, Undefined };
