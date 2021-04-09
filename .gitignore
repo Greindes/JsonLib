@@ -71,3 +71,7 @@ Thumbs.db
 *.dll
 *.exe
 
+lib/JsonArray.h
+lib/JsonObject.h
+lib/JsonParser.h
+lib/JsonValue.h

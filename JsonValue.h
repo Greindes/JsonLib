@@ -18,6 +18,7 @@ public:
     JsonValue(const JsonArray& ja);
     JsonValue(const JsonObject& jo);
     ~JsonValue();
+    JsonValue & operator=(const JsonValue& other);
 
     static JsonValue getNullValue();
 
@@ -37,16 +38,16 @@ public:
 
     Type type() const;
     std::string getJsonString(size_t space = 0) const;
-    void print(size_t space = 0) const;
 
 private:
+    void deletePointers();
+
     Type valueType = Undefined;
     bool boolValue = false;
     int intValue = 0;
     std::string stringValue = "";
     JsonArray * jsonArrayPtr = nullptr;
     JsonObject * jsonObjectPtr = nullptr;
-
 };
 
 #endif // JSONVALUE_H

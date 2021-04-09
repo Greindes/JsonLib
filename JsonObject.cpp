@@ -8,28 +8,41 @@ JsonObject::JsonObject()
 
 }
 
+JsonObject::JsonObject(const JsonObject &other) : values(other.values), valsSize(other.size())
+{
+
+}
+
+JsonObject &JsonObject::operator=(const JsonObject &other)
+{
+    values.clear();
+    values = other.values;
+    valsSize = other.size();
+    return *this;
+}
+
 JsonObject JsonObject::getFromJsonString(const std::string &json)
 {
     return JsonParser::getJsonObject(json);
 }
 
-bool JsonObject::isEmpty()
+bool JsonObject::isEmpty() const
 {
     return values.empty();
 }
 
-size_t JsonObject::size()
+size_t JsonObject::size() const
 {
     return valsSize;
 }
 
-JsonValue JsonObject::get(std::string key)
+JsonValue& JsonObject::get(std::string key)
 {
     for (auto iter = begin(); iter != end(); ++iter) {
         if (iter.key() == key)
-            return iter.value();
+            return *iter;
     }
-    return JsonValue();
+    throw std::out_of_range(key);
 }
 
 JsonObject::iterator JsonObject::find(std::string key)
@@ -87,19 +100,6 @@ std::string JsonObject::getJsonString(size_t space) const
     return res;
 }
 
-void JsonObject::print(size_t tab) const
-{
-    std::string fill(tab + 4, ' ');
-    std::cout << "{\n";
-    for (auto iter = values.begin(); iter != values.end(); ++iter) {
-        std::cout << fill << '\"' << iter->first << "\" : ";
-        iter->second.print(tab + 4);
-        if (iter != --values.end())
-            std::cout << ',';
-        std::cout << '\n';
-    }
-    std::cout << std::string(tab, ' ') << "}";
-}
 
 JsonObject::iterator::iterator()
 {

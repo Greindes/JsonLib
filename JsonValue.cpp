@@ -50,10 +50,25 @@ JsonValue::JsonValue(const JsonObject& jo) : valueType(Object)
 
 JsonValue::~JsonValue()
 {
-    if (jsonArrayPtr)
-        delete jsonArrayPtr;
-    if (jsonObjectPtr)
-        delete jsonObjectPtr;
+    deletePointers();
+}
+
+JsonValue &JsonValue::operator=(const JsonValue &other)
+{
+    deletePointers();
+    stringValue.clear();
+    valueType = other.type();
+    if (isBool())
+        boolValue = other.toBool();
+    else if (isInt())
+        intValue = other.toInt();
+    else if (isObject())
+        jsonObjectPtr = new JsonObject(other.toObject(JsonObject()));
+    else if (isArray())
+        jsonArrayPtr = new JsonArray(other.toArray(JsonArray()));
+    else if (isString())
+        stringValue = other.toString();
+    return *this;
 }
 
 JsonValue JsonValue::getNullValue()
@@ -151,20 +166,15 @@ std::string JsonValue::getJsonString(size_t space) const
     return "";
 }
 
-void JsonValue::print(size_t space) const
+void JsonValue::deletePointers()
 {
-    if (isUndefined())
-        return;
-    if (isNull())
-        std::cout << "null"; //"\n";
-    else if (isBool())
-        std::cout << (boolValue ? "true" : "false"); // << '\n';
-    else if (isInt())
-        std::cout << intValue; // << '\n';
-    else if (isString())
-        std::cout << '\"' << stringValue << "\"";//\n";
-    else if (isObject())
-        jsonObjectPtr->print(space);
-    else if (isArray())
-        jsonArrayPtr->print(space);
+    if (jsonArrayPtr) {
+        delete jsonArrayPtr;
+        jsonArrayPtr = nullptr;
+    }
+    if (jsonObjectPtr) {
+        delete jsonObjectPtr;
+        jsonObjectPtr = nullptr;
+    }
 }
+

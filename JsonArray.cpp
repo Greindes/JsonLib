@@ -8,6 +8,17 @@ JsonArray::JsonArray()
 
 }
 
+JsonArray::JsonArray(const JsonArray &other) : values(other.values)
+{
+
+}
+
+JsonArray &JsonArray::operator=(const JsonArray &other)
+{
+    values = other.values;
+    return *this;
+}
+
 JsonArray JsonArray::getFromJsonString(const std::string &json)
 {
     return JsonParser::getJsonArray(json);
@@ -51,17 +62,6 @@ std::string JsonArray::getJsonString(size_t space) const
     return res;
 }
 
-void JsonArray::print(size_t space) const
-{
-    size_t size = values.size();
-    std::cout << '[';
-    for (size_t i = 0; i < size; ++i) {
-        values[i].print(space);
-        if (i < size - 1)
-            std::cout << ", ";
-    }
-    std::cout << "]\n";
-}
 
 JsonValue &JsonArray::operator[](size_t i)
 {

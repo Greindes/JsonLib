@@ -8,6 +8,8 @@ class JsonArray
 {
 public:
     JsonArray();
+    JsonArray(const JsonArray& other);
+    JsonArray& operator=(const JsonArray& other);
     static JsonArray getFromJsonString(const std::string& json);
 
     size_t size();
@@ -20,7 +22,6 @@ public:
     JsonValue& operator[](size_t i);
 
     std::string getJsonString(size_t space) const;
-    void print(size_t space) const;
 
 private:
     std::vector<JsonValue> values;

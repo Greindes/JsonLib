@@ -9,6 +9,8 @@ class JsonObject
 {
 public:
     JsonObject();
+    JsonObject(const JsonObject& other);
+    JsonObject & operator=(const JsonObject& other);
     static JsonObject getFromJsonString(const std::string& json);
     class iterator
     {
@@ -28,10 +30,10 @@ public:
         std::list<std::pair<std::string, JsonValue>>::iterator iter;
     };
 
-    bool isEmpty();
-    size_t size();
+    bool isEmpty() const;
+    size_t size() const;
 
-    JsonValue get(std::string key);
+    JsonValue& get(std::string key);
 
     iterator find(std::string key);
     iterator begin();
@@ -41,7 +43,6 @@ public:
     void remove(const std::string& key);
 
     std::string getJsonString(size_t space = 0) const;
-    void print(size_t t = 0) const;
 private:
     std::list<std::pair<std::string, JsonValue>> values;
     size_t valsSize;
