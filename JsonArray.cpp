@@ -62,6 +62,16 @@ std::string JsonArray::getJsonString(size_t space) const
     return res;
 }
 
+std::vector<JsonValue> &JsonArray::getValues()
+{
+    return values;
+}
+
+const std::vector<JsonValue> &JsonArray::getValues() const
+{
+    return values;
+}
+
 
 JsonValue &JsonArray::operator[](size_t i)
 {

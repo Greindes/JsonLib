@@ -38,34 +38,20 @@ size_t JsonObject::size() const
 
 JsonValue& JsonObject::get(std::string key)
 {
-    for (auto iter = begin(); iter != end(); ++iter) {
-        if (iter.key() == key)
-            return *iter;
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        if (iter->first == key)
+            return iter->second;
     }
     throw std::out_of_range(key);
 }
 
-JsonObject::iterator JsonObject::find(std::string key)
+const JsonValue &JsonObject::get(std::string key) const
 {
-    for (auto iter = begin(); iter != end(); ++iter) {
-        if (iter.key() == key)
-            return iter;
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        if (iter->first == key)
+            return iter->second;
     }
-    return end();
-}
-
-JsonObject::iterator JsonObject::begin()
-{
-    iterator res;
-    res.iter = values.begin();
-    return res;
-}
-
-JsonObject::iterator JsonObject::end()
-{
-    iterator res;
-    res.iter = values.end();
-    return res;
+    throw std::out_of_range(key);
 }
 
 void JsonObject::insert(const std::string &key, const JsonValue &value)
@@ -77,10 +63,28 @@ void JsonObject::insert(const std::string &key, const JsonValue &value)
 void JsonObject::remove(const std::string &key)
 {
     auto iter = find(key);
-    if (iter != end()) {
-        values.erase(iter.iter);
+    if (iter != values.end()) {
+        values.erase(iter);
         --valsSize;
     }
+}
+
+JsonObject::list::iterator JsonObject::find(std::string key)
+{
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        if (iter->first == key)
+            return iter;
+    }
+    return values.end();
+}
+
+JsonObject::list::const_iterator JsonObject::find(std::string key) const
+{
+    for (auto iter = values.begin(); iter != values.end(); ++iter) {
+        if (iter->first == key)
+            return iter;
+    }
+    return values.end();
 }
 
 std::string JsonObject::getJsonString(size_t space) const
@@ -100,50 +104,14 @@ std::string JsonObject::getJsonString(size_t space) const
     return res;
 }
 
-
-JsonObject::iterator::iterator()
+const std::list<std::pair<std::string, JsonValue> > &JsonObject::getValues() const
 {
-
+    return values;
 }
 
-JsonObject::iterator::iterator(const JsonObject::iterator &other) : iter(other.iter)
+std::list<std::pair<std::string, JsonValue> > &JsonObject::getValues()
 {
-
+    return values;
 }
 
-std::string JsonObject::iterator::key() const
-{
-    return iter->first;
-}
 
-JsonValue JsonObject::iterator::value() const
-{
-    return iter->second;
-}
-
-JsonObject::iterator JsonObject::iterator::operator++()
-{
-    ++iter;
-    return *this;
-}
-
-JsonObject::iterator JsonObject::iterator::operator--()
-{
-    --iter;
-    return *this;
-}
-
-JsonValue &JsonObject::iterator::operator*() const
-{
-    return iter->second;
-}
-
-bool JsonObject::iterator::operator==(const JsonObject::iterator &other) const
-{
-    return iter == other.iter;
-}
-
-bool JsonObject::iterator::operator!=(const JsonObject::iterator &other) const
-{
-    return iter != other.iter;
-}

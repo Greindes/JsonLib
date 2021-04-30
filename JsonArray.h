@@ -23,6 +23,9 @@ public:
 
     std::string getJsonString(size_t space) const;
 
+    std::vector<JsonValue>& getValues();
+    const std::vector<JsonValue>& getValues() const;
+
 private:
     std::vector<JsonValue> values;
 };
