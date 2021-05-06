@@ -42,7 +42,7 @@ public:
 
 private:
     std::variant<bool, int, std::string, std::unique_ptr<JsonArray>,
-                    std::unique_ptr<JsonObject>> value;
+                    std::unique_ptr<JsonObject>> value = 0;
 
     Type valueType = Undefined;
 };
