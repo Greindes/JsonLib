@@ -42,6 +42,8 @@ public:
 private:
     void clearData();
 
+    //TODO:
+    //Заменить данные на одно значение типа std::variant ИЛИ std::any
     Type valueType = Undefined;
     bool boolValue = false;
     int intValue = 0;
