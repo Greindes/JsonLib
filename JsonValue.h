@@ -3,6 +3,7 @@
 #include"JsonLib_global.h"
 #include<string>
 #include<memory>
+#include<variant>
 
 class JsonObject;
 class JsonArray;
@@ -31,7 +32,7 @@ public:
     bool isUndefined() const;
 
     bool toBool(bool defaultValue = false) const;
-    double toInt(int defaultValue = 0) const;
+    int toInt(int defaultValue = 0) const;
     std::string toString(const std::string& defaultValue = "") const;
     JsonArray toArray(const JsonArray& defaultValue) const;
     JsonObject toObject(const JsonObject& defaultValue) const;
@@ -40,16 +41,10 @@ public:
     std::string getJsonString(size_t space = 0) const;
 
 private:
-    void clearData();
+    std::variant<bool, int, std::string, std::unique_ptr<JsonArray>,
+                    std::unique_ptr<JsonObject>> value;
 
-    //TODO:
-    //Заменить данные на одно значение типа std::variant ИЛИ std::any
     Type valueType = Undefined;
-    bool boolValue = false;
-    int intValue = 0;
-    std::string stringValue = "";
-    std::unique_ptr<JsonArray> jsonArrayPtr;
-    std::unique_ptr<JsonObject> jsonObjectPtr;
 };
 
 #endif // JSONVALUE_H

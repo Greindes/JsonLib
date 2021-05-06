@@ -9,62 +9,64 @@ JsonValue::JsonValue()
 
 }
 
-JsonValue::JsonValue(const JsonValue &other) : valueType(other.type())
+JsonValue::JsonValue(const JsonValue &other)
 {
-    if (isBool())
-        boolValue = other.boolValue;
+    valueType = other.type();
+    if (isNull())
+        value = 0;
+    else if (isBool())
+        value = other.toBool();
     else if (isInt())
-        intValue = other.intValue;
-    else if (isString())
-        stringValue = other.stringValue;
+        value = other.toInt();
     else if (isObject())
-        jsonObjectPtr = std::make_unique<JsonObject>(*other.jsonObjectPtr);
+        value = std::make_unique<JsonObject>(other.toObject(JsonObject()));
     else if (isArray())
-        jsonArrayPtr = std::make_unique<JsonArray>(*other.jsonArrayPtr);
+        value = std::make_unique<JsonArray>(other.toArray(JsonArray()));
+    else if (isString())
+        value = other.toString();
 }
 
-JsonValue::JsonValue(bool b) : valueType(Bool), boolValue(b)
+JsonValue::JsonValue(bool b) : value(b), valueType(Bool)
 {
 
 }
 
-JsonValue::JsonValue(int i) : valueType(Int), intValue(i)
+JsonValue::JsonValue(int i) : value(i), valueType(Int)
 {
 
 }
 
-JsonValue::JsonValue(const std::string &s) : valueType(String), stringValue(s)
+JsonValue::JsonValue(const std::string &s) : value(s), valueType(String)
 {
 
 }
 
 JsonValue::JsonValue(const JsonArray &ja) : valueType(Array)
 {
-    //jsonArrayPtr = new JsonArray(ja);
-    jsonArrayPtr = std::make_unique<JsonArray>(ja);
+    value = std::make_unique<JsonArray>(ja);
 }
 
 JsonValue::JsonValue(const JsonObject& jo) : valueType(Object)
 {
-    //jsonObjectPtr = new JsonObject(jo);
-    jsonObjectPtr = std::make_unique<JsonObject>(jo);
+    value = std::make_unique<JsonObject>(jo);
 }
 
 
 JsonValue &JsonValue::operator=(const JsonValue &other)
 {
-    clearData();
     valueType = other.type();
-    if (isBool())
-        boolValue = other.toBool();
+    if (isNull())
+        value = 0;
+    else if (isBool())
+        value = other.toBool();
     else if (isInt())
-        intValue = other.toInt();
+        value = other.toInt();
     else if (isObject())
-        jsonObjectPtr = std::make_unique<JsonObject>(*other.jsonObjectPtr);
+        value = std::make_unique<JsonObject>(other.toObject(JsonObject()));
     else if (isArray())
-        jsonArrayPtr = std::make_unique<JsonArray>(*other.jsonArrayPtr);
+        value = std::make_unique<JsonArray>(other.toArray(JsonArray()));
     else if (isString())
-        stringValue = other.toString();
+        value = other.toString();
     return *this;
 }
 
@@ -110,29 +112,30 @@ bool JsonValue::isUndefined() const
     return valueType == Undefined;
 }
 
+
 bool JsonValue::toBool(bool defaultValue) const
 {
-    return isBool() ? boolValue : defaultValue;
+    return isBool() ? std::get<bool>(value) : defaultValue;
 }
 
-double JsonValue::toInt(int defaultValue) const
+int JsonValue::toInt(int defaultValue) const
 {
-    return isInt() ? intValue : defaultValue;
+    return isInt() ? std::get<int>(value) : defaultValue;
 }
 
 std::string JsonValue::toString(const std::string &defaultValue) const
 {
-    return isString() ? stringValue : defaultValue;
+    return isString() ? std::get<std::string>(value) : defaultValue;
 }
 
 JsonArray JsonValue::toArray(const JsonArray &defaultValue) const
 {
-    return isArray() ? *jsonArrayPtr : defaultValue;
+    return isArray() ? *std::get<std::unique_ptr<JsonArray>>(value) : defaultValue;
 }
 
 JsonObject JsonValue::toObject(const JsonObject &defaultValue) const
 {
-    return isObject() ? *jsonObjectPtr : defaultValue;
+    return isObject() ? *std::get<std::unique_ptr<JsonObject>>(value) : defaultValue;
 }
 
 JsonValue::Type JsonValue::type() const
@@ -147,26 +150,19 @@ std::string JsonValue::getJsonString(size_t space) const
     if (isNull())
         return "null";
     else if (isBool())
-        return (boolValue ? "true" : "false");
+        return (std::get<bool>(value) ? "true" : "false");
     else if (isInt())
-        return std::to_string(intValue); // << '\n';
+        return std::to_string(std::get<int>(value)); // << '\n';
     else if (isObject())
-        return jsonObjectPtr->getJsonString(space);
+        return std::get<std::unique_ptr<JsonArray>>(value)->getJsonString(space);
     else if (isArray())
-        return jsonArrayPtr->getJsonString(space);
+        return std::get<std::unique_ptr<JsonArray>>(value)->getJsonString(space);
     else if (isString()) {
         std::string res = "\"";
-        res += stringValue;
+        res += std::get<std::string>(value);
         res.push_back('\"');
         return res;
     }
     return "";
-}
-
-void JsonValue::clearData()
-{
-    stringValue.clear();
-    jsonArrayPtr.reset();
-    jsonObjectPtr.reset();
 }
 
