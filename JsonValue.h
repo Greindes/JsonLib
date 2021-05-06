@@ -2,6 +2,7 @@
 #define JSONVALUE_H
 #include"JsonLib_global.h"
 #include<string>
+#include<memory>
 
 class JsonObject;
 class JsonArray;
@@ -17,7 +18,6 @@ public:
     JsonValue(const std::string& s);
     JsonValue(const JsonArray& ja);
     JsonValue(const JsonObject& jo);
-    ~JsonValue();
     JsonValue & operator=(const JsonValue& other);
 
     static JsonValue getNullValue();
@@ -40,14 +40,14 @@ public:
     std::string getJsonString(size_t space = 0) const;
 
 private:
-    void deletePointers();
+    void clearData();
 
     Type valueType = Undefined;
     bool boolValue = false;
     int intValue = 0;
     std::string stringValue = "";
-    JsonArray * jsonArrayPtr = nullptr;
-    JsonObject * jsonObjectPtr = nullptr;
+    std::unique_ptr<JsonArray> jsonArrayPtr;
+    std::unique_ptr<JsonObject> jsonObjectPtr;
 };
 
 #endif // JSONVALUE_H

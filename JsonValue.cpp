@@ -18,9 +18,9 @@ JsonValue::JsonValue(const JsonValue &other) : valueType(other.type())
     else if (isString())
         stringValue = other.stringValue;
     else if (isObject())
-        jsonObjectPtr = new JsonObject(*other.jsonObjectPtr);
+        jsonObjectPtr = std::make_unique<JsonObject>(*other.jsonObjectPtr);
     else if (isArray())
-        jsonArrayPtr = new JsonArray(*other.jsonArrayPtr);
+        jsonArrayPtr = std::make_unique<JsonArray>(*other.jsonArrayPtr);
 }
 
 JsonValue::JsonValue(bool b) : valueType(Bool), boolValue(b)
@@ -40,32 +40,29 @@ JsonValue::JsonValue(const std::string &s) : valueType(String), stringValue(s)
 
 JsonValue::JsonValue(const JsonArray &ja) : valueType(Array)
 {
-    jsonArrayPtr = new JsonArray(ja);
+    //jsonArrayPtr = new JsonArray(ja);
+    jsonArrayPtr = std::make_unique<JsonArray>(ja);
 }
 
 JsonValue::JsonValue(const JsonObject& jo) : valueType(Object)
 {
-    jsonObjectPtr = new JsonObject(jo);
+    //jsonObjectPtr = new JsonObject(jo);
+    jsonObjectPtr = std::make_unique<JsonObject>(jo);
 }
 
-JsonValue::~JsonValue()
-{
-    deletePointers();
-}
 
 JsonValue &JsonValue::operator=(const JsonValue &other)
 {
-    deletePointers();
-    stringValue.clear();
+    clearData();
     valueType = other.type();
     if (isBool())
         boolValue = other.toBool();
     else if (isInt())
         intValue = other.toInt();
     else if (isObject())
-        jsonObjectPtr = new JsonObject(other.toObject(JsonObject()));
+        jsonObjectPtr = std::make_unique<JsonObject>(*other.jsonObjectPtr);
     else if (isArray())
-        jsonArrayPtr = new JsonArray(other.toArray(JsonArray()));
+        jsonArrayPtr = std::make_unique<JsonArray>(*other.jsonArrayPtr);
     else if (isString())
         stringValue = other.toString();
     return *this;
@@ -166,15 +163,10 @@ std::string JsonValue::getJsonString(size_t space) const
     return "";
 }
 
-void JsonValue::deletePointers()
+void JsonValue::clearData()
 {
-    if (jsonArrayPtr) {
-        delete jsonArrayPtr;
-        jsonArrayPtr = nullptr;
-    }
-    if (jsonObjectPtr) {
-        delete jsonObjectPtr;
-        jsonObjectPtr = nullptr;
-    }
+    stringValue.clear();
+    jsonArrayPtr.reset();
+    jsonObjectPtr.reset();
 }
 
